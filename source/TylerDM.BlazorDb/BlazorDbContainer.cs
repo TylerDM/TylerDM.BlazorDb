@@ -7,9 +7,10 @@ public class BlazorDbContainer<TDocument, TId>(
 	where TDocument : class
 	where TId : struct
 {
-	private readonly string _keyPrefix = $"{_config.DbConfig.Name}_{_config.Name}_";
+	private readonly string _keyPrefix = $"{_config.Database.Name}_{_config.ContainerName}_";
 
-	public string Name => _config.Name;
+	public BlazorDb Database => _config.Database;
+	public string Name => _config.ContainerName;
 
 	public async ValueTask UpdateAsync(TDocument item)
 	{

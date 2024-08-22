@@ -1,20 +1,19 @@
 ﻿namespace TylerDM.BlazorDb.Internals;
 
-public class BlazorDbConfigBuilder
+public class BlazorDbConfigBuilder(IServiceCollection _services, BlazorDb _db)
 {
-	public string DatabaseName { get; set; } = "";
-
-	public void AddContainer<TDocument, TId>(Func<TDocument, TId> getId, string key = "")
+	public void AddContainer<TDocument, TId>(Func<TDocument, TId> getId, string name = "")
 		where TDocument : class
 		where TId : struct
 	{
-		
-	}
+		if (string.IsNullOrWhiteSpace(name))
+			name = typeof(TDocument).FullName!;
 
-	public BlazorDbConfig Build()
-	{
-		var frozenKeys = _keys.ToFrozenDictionary();
-		var frozenGetIdFunctions = _getIdFuncs.ToFrozenDictionary();
-		return new(frozenKeys, frozenGetIdFunctions, DatabaseName);
+		var config = new BlazorDbContainerConfig<TDocument, TId>(_db, name, getId);
+		_services.AddSingleton<BlazorDbContainer<TDocument, TId>>(x =>
+		{
+			var storage = x.GetRequiredService<ILocalStorageService>();
+			return new(storage, config);
+		});
 	}
 }

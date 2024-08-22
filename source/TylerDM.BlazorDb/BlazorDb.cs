@@ -1,6 +1,6 @@
 ﻿namespace TylerDM.BlazorDb;
 
-public class BlazorDb(BlazorDbConfig _config)
+public class BlazorDb(string _name)
 {
-	public string Name => _config.Name;
+	public string Name => _name;
 }
