@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TylerDM.BlazorDb", "TylerDM.BlazorDb\TylerDM.BlazorDb.csproj", "{DA281AB3-88ED-4BEA-B83E-EC247D478F13}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TylerDM.BlazorDb.Tests", "TylerDM.BlazorDb.Tests\TylerDM.BlazorDb.Tests.csproj", "{C1DBAB2C-1C5E-46AD-B0FF-4919CD1038D6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CB2A5412-6BDA-45A9-9170-434E026D7DBB}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		..\LICENSE = ..\LICENSE
+		..\.github\workflows\on-main-merge-publish.yaml = ..\.github\workflows\on-main-merge-publish.yaml
+		..\.github\workflows\on-pr-test.yaml = ..\.github\workflows\on-pr-test.yaml
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA281AB3-88ED-4BEA-B83E-EC247D478F13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA281AB3-88ED-4BEA-B83E-EC247D478F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA281AB3-88ED-4BEA-B83E-EC247D478F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA281AB3-88ED-4BEA-B83E-EC247D478F13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1DBAB2C-1C5E-46AD-B0FF-4919CD1038D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1DBAB2C-1C5E-46AD-B0FF-4919CD1038D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1DBAB2C-1C5E-46AD-B0FF-4919CD1038D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1DBAB2C-1C5E-46AD-B0FF-4919CD1038D6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4F6B2B1-55AF-48B4-9D42-C99249015EB4}
+	EndGlobalSection
+EndGlobal

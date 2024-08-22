@@ -1,0 +1,35 @@
+name: Publish on push to main.
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: source/TylerDM.BlazorDb
+          
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: dotnet build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: dotnet pack
+        run: dotnet pack --configuration Release --no-build --output ./nupkg 
+
+      - name: dotnet nuget push
+        run: dotnet nuget push "./nupkg/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json

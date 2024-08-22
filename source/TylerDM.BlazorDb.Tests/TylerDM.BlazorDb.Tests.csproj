@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Blazored.LocalStorage.TestExtensions" Version="4.5.0" />
+		<PackageReference Include="bunit" Version="1.31.3" />
+		<PackageReference Include="coverlet.collector" Version="6.0.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
+		<PackageReference Include="xunit" Version="2.9.0" />
+		<PackageReference Include="Xunit.DependencyInjection" Version="9.3.0" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\TylerDM.BlazorDb\TylerDM.BlazorDb.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Xunit" />
+		<Using Include="Blazored.LocalStorage" />
+		<Using Include="Bunit" />
+		<Using Include="Microsoft.Extensions.Hosting" />
+		<Using Include="TylerDM.BlazorDb.Functions" Static="true" />
+	</ItemGroup>
+
+</Project>

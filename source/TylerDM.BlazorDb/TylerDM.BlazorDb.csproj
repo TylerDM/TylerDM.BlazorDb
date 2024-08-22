@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<IsPackable>true</IsPackable>
+		<Version>0.1.0</Version>
+		<RepositoryType>Git</RepositoryType>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="System.Collections.Frozen" />
+		<Using Include="System.Text.Json" />
+
+		<Using Include="TylerDM.BlazorDb.Internals" />
+
+		<Using Include="Blazored.LocalStorage" />
+		<Using Include="Blazored.LocalStorage.StorageOptions" />
+	</ItemGroup>
+
+</Project>
