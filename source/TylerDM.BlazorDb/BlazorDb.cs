@@ -1,52 +1,6 @@
 ﻿namespace TylerDM.BlazorDb;
 
-public class BlazorDb<TItem>(LocalStorageDb _db)
-	where TItem : class
-{
-	public ValueTask UpdateAsync(TItem item) =>
-		_db.UpdateAsync(item);
-
-	public ValueTask AddAsync(TItem item) =>
-		_db.AddAsync(item);
-
-	public ValueTask AddOrUpdateAsync(TItem item) =>
-		_db.AddOrUpdateAsync(item);
-
-	public ValueTask<bool> ExistsAsync<TId>(TId id)
-		where TId : struct =>
-		_db.ExistsAsync<TItem, TId>(id);
-
-	public ValueTask<bool> ExistsAsync(Func<TItem, bool> predicate) =>
-		_db.ExistsAsync(predicate);
-
-	public ValueTask<bool> ExistsAsync(TItem item) =>
-		_db.ExistsAsync(item);
-
-	public IAsyncEnumerable<TItem> QueryAsync() =>
-		_db.QueryAsync<TItem>();
-
-	public ValueTask<TItem?> GetAsync(Func<TItem, bool> predicate) =>
-		_db.GetAsync(predicate);
-
-	public ValueTask<TItem> GetRequiredAsync(Func<TItem, bool> predicate) =>
-		_db.GetRequiredAsync(predicate);
-
-	public ValueTask<List<TItem>> GetAllAsync(Func<TItem, bool> predicate) =>
-		_db.GetAllAsync(predicate);
-
-	public ValueTask<TItem> GetRequiredAsync<TId>(TId id)
-		where TId : struct =>
-		_db.GetRequiredAsync<TItem, TId>(id);
-
-	public ValueTask DeleteAsync<TId>(TId id)
-		where TId : struct =>
-		_db.DeleteAsync<TItem, TId>(id);
-
-	public ValueTask DeleteAsync(TItem item) =>
-		_db.DeleteAsync(item);
-}
-
-public class LocalStorageDb(ILocalStorageService _storage, BlazorDbConfig _config) : BlazorDbBase(_storage, _config)
+public class BlazorDb(ILocalStorageService _storage, BlazorDbConfig _config)
 {
 	public async ValueTask UpdateAsync<T>(T item)
 		where T : class
@@ -147,5 +101,31 @@ public class LocalStorageDb(ILocalStorageService _storage, BlazorDbConfig _confi
 	{
 		var key = getKey(item);
 		return _storage.RemoveItemAsync(key);
+	}
+
+	protected string getKey<TItem, TId>(TId id)
+		where TItem : class
+		where TId : struct =>
+		$"{getPrefix<TItem>()}_{id}";
+
+	protected string getKey<T>(T item)
+		where T : class =>
+		$"{getPrefix<T>()}_{getId(item)}";
+
+	protected string getId<T>(T item)
+		where T : class
+	{
+		var type = typeof(T);
+		if (_config.GetIdFunctions.TryGetValue(type, out var func))
+			return func(item).ToString() ??
+				throw new Exception("Get ID function returned null for the given item.");
+		throw new TypeNotConfiguredException(type);
+	}
+
+	protected string getPrefix<T>()
+	{
+		var type = typeof(T);
+		if (_config.KeyPrefixes.TryGetValue(type, out var prefix)) return prefix;
+		throw new TypeNotConfiguredException(type);
 	}
 }

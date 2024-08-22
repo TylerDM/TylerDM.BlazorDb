@@ -11,7 +11,7 @@ public class Startup
 		var localStorageService = getTestLocalStorage();
 		services.AddBlazorLocalStorageDb(builder =>
 		{
-			builder.AddTable((Table item) => item.Id);
+			builder.AddContainer((Document item) => item.Id);
 		}, localStorageService);
 	}
 

@@ -5,7 +5,7 @@ public class BlazorDbConfigBuilder
 	private readonly Dictionary<Type, string> _keys = [];
 	private readonly Dictionary<Type, Func<object, object>> _getIdFuncs = [];
 
-	public void AddTable<TItem, TId>(Func<TItem, TId> getId, string key = "")
+	public void AddContainer<TItem, TId>(Func<TItem, TId> getId, string key = "")
 		where TItem : class
 		where TId : struct
 	{

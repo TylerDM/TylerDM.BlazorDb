@@ -7,7 +7,7 @@ public static class Functions
 	public static int NextInt() =>
 		_intFactory.NextInt();
 
-	public static Task AssertThrowsAsync(Func<ValueTask<Table>> func) =>
+	public static Task AssertThrowsAsync(Func<ValueTask<Document>> func) =>
 		Assert.ThrowsAnyAsync<Exception>(async () => await func());
 
 	public static Task AssertThrowsAsync(Func<ValueTask> func) =>

@@ -1,6 +1,6 @@
 ﻿namespace TylerDM.BlazorDb;
 
-public record Table(
+public record Document(
 	Guid Id
 )
 {

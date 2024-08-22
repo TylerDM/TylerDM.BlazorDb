@@ -1,6 +1,4 @@
-﻿using TylerDM.BlazorDb.Internals;
-
-namespace TylerDM.BlazorDb;
+﻿namespace TylerDM.BlazorDb;
 
 public static class Startup
 {
@@ -21,8 +19,8 @@ public static class Startup
 
 	private static void addBlazorLocalStorageDb(this IServiceCollection services, Action<BlazorDbConfigBuilder> configureDb)
 	{
-		services.AddSingleton<LocalStorageDb>();
-		services.AddSingleton(typeof(BlazorDb<>));
+		services.AddSingleton<BlazorDb>();
+		services.AddSingleton(typeof(BlazorDbContainer<>));
 
 		var builder = new BlazorDbConfigBuilder();
 		configureDb(builder);

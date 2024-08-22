@@ -1,6 +1,6 @@
 ﻿namespace TylerDM.BlazorDb;
 
-public class Tests(BlazorDb<Table> _db)
+public class Tests(BlazorDbContainer<Document> _db)
 {
 	[Fact]
 	public async Task GetAsync()
@@ -32,7 +32,7 @@ public class Tests(BlazorDb<Table> _db)
 	[Fact]
 	public async Task GetRequiredAsync()
 	{
-		Task assertThrowsAsync(Func<ValueTask<Table>> func) =>
+		Task assertThrowsAsync(Func<ValueTask<Document>> func) =>
 				Assert.ThrowsAnyAsync<Exception>(async () => await func());
 
 		var item = await createAndAddRandomAsync(default, default);
@@ -123,7 +123,7 @@ public class Tests(BlazorDb<Table> _db)
 	public async Task UpdateAsync()
 	{
 		var item = createRandom();
-		Table restored;
+		Document restored;
 
 		//Throw if doesn't exist.
 		await AssertThrowsAsync(() => _db.UpdateAsync(item));
@@ -141,17 +141,17 @@ public class Tests(BlazorDb<Table> _db)
 		Assert.Equal(item, restored);
 	}
 
-	static Table createRandom(int? x = null, int? y = null) =>
+	static Document createRandom(int? x = null, int? y = null) =>
 		new(Guid.NewGuid())
 		{
 			X = x ?? NextInt(),
 			Y = y ?? NextInt()
 		};
 
-	async ValueTask<Table> createAndAddRandomAsync(int? x = null, int? y = null)
+	async ValueTask<Document> createAndAddRandomAsync(int? x = null, int? y = null)
 	{
-		var table = createRandom(x, y);
-		await _db.AddOrUpdateAsync(table);
-		return table;
+		var document = createRandom(x, y);
+		await _db.AddOrUpdateAsync(document);
+		return document;
 	}
 }
