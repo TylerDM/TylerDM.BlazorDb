@@ -6,8 +6,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Blazored.LocalStorage.TestExtensions" Version="4.5.0" />
-		<PackageReference Include="bunit" Version="1.31.3" />
 		<PackageReference Include="coverlet.collector" Version="6.0.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,7 +20,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\TylerDM.BlazorDb\TylerDM.BlazorDb.csproj" />
+		<PackageReference Include="bunit" Version="1.31.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\TylerDM.BlazorDb.Testing\TylerDM.BlazorDb.Testing.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

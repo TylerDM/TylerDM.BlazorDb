@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<IsPackable>true</IsPackable>
-		<Version>0.2.0</Version>
+		<Version>0.1.0</Version>
 		<RepositoryType>Git</RepositoryType>
 		<NeutralLanguage>en-US</NeutralLanguage>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -10,17 +10,19 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+	  <PackageReference Include="bunit" Version="1.31.3" />
+		<PackageReference Include="Blazored.LocalStorage.TestExtensions" Version="4.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Using Include="System.Collections.Frozen" />
-		<Using Include="System.Text.Json" />
+		<ProjectReference Include="..\TylerDM.BlazorDb\TylerDM.BlazorDb.csproj" />
+	</ItemGroup>
 
-		<Using Include="TylerDM.BlazorDb.Internals" />
-
-		<Using Include="Blazored.LocalStorage" />
+	<ItemGroup>
 		<Using Include="Blazored.LocalStorage.StorageOptions" />
+		<Using Include="TylerDM.BlazorDb.Internals" />
+		<Using Include="Blazored.LocalStorage" />
+		<Using Include="Bunit" />
 	</ItemGroup>
 
 </Project>

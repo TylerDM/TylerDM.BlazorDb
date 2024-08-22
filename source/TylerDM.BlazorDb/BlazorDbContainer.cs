@@ -20,18 +20,20 @@ public class BlazorDbContainer<TDocument, TId>(
 		await AddOrUpdateAsync(item);
 	}
 
-	public async ValueTask AddAsync(TDocument item)
+	public async ValueTask<TDocument> AddAsync(TDocument item)
 	{
 		if (await ExistsAsync(item))
 			throw new Exception("Item with type and ID already exists in DB.");
 
 		await AddOrUpdateAsync(item);
+		return item;
 	}
 
-	public ValueTask AddOrUpdateAsync(TDocument item)
+	public async ValueTask<TDocument> AddOrUpdateAsync(TDocument item)
 	{
 		var key = getKey(item);
-		return _storage.SetItemAsync(key, item);
+		await _storage.SetItemAsync(key, item);
+		return item;
 	}
 
 	public ValueTask<bool> ExistsAsync(TId id)

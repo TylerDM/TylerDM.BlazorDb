@@ -8,20 +8,13 @@ public class Startup
 
 	public void ConfigureServices(IServiceCollection services)
 	{
-		services.AddBlazorDb(builder =>
+		services.AddBlazorDbTesting(builder =>
 		{
-			builder.AddContainer((Document item) => item.Id);
+			builder.AddContainer<Document, int>(x => x.Id);
 		});
-		switchToTestingLocalStorage(services);
 	}
 
 	public void Configure()
 	{
-	}
-
-	private void switchToTestingLocalStorage(IServiceCollection services)
-	{
-		services.Remove(services.Single(x => x.ServiceType == typeof(ILocalStorageService)));
-		services.AddSingleton(new TestContext().AddBlazoredLocalStorage());
 	}
 }
