@@ -1,47 +1,110 @@
 ﻿namespace TylerDM.BlazorDb;
 
-public class BlazorDbContainer<TItem>(BlazorDb _db)
-	where TItem : class
+public class BlazorDbContainer<TDocument, TId>(
+	ILocalStorageService _storage,
+	BlazorDbContainerConfig<TDocument, TId> _config
+)
+	where TDocument : class
+	where TId : struct
 {
-	public ValueTask UpdateAsync(TItem item) =>
-		_db.UpdateAsync(item);
+	private readonly string _keyPrefix = $"{_config.DbConfig.Name}_{_config.Name}_";
 
-	public ValueTask AddAsync(TItem item) =>
-		_db.AddAsync(item);
+	public string Name => _config.Name;
 
-	public ValueTask AddOrUpdateAsync(TItem item) =>
-		_db.AddOrUpdateAsync(item);
+	public async ValueTask UpdateAsync(TDocument item)
+	{
+		if (await ExistsAsync(item) == false)
+			throw new Exception("Item with type and ID does not exist in DB.");
 
-	public ValueTask<bool> ExistsAsync<TId>(TId id)
-		where TId : struct =>
-		_db.ExistsAsync<TItem, TId>(id);
+		await AddOrUpdateAsync(item);
+	}
 
-	public ValueTask<bool> ExistsAsync(Func<TItem, bool> predicate) =>
-		_db.ExistsAsync(predicate);
+	public async ValueTask AddAsync(TDocument item)
+	{
+		if (await ExistsAsync(item))
+			throw new Exception("Item with type and ID already exists in DB.");
 
-	public ValueTask<bool> ExistsAsync(TItem item) =>
-		_db.ExistsAsync(item);
+		await AddOrUpdateAsync(item);
+	}
 
-	public IAsyncEnumerable<TItem> QueryAsync() =>
-		_db.QueryAsync<TItem>();
+	public ValueTask AddOrUpdateAsync(TDocument item)
+	{
+		var key = getKey(item);
+		return _storage.SetItemAsync(key, item);
+	}
 
-	public ValueTask<TItem?> GetAsync(Func<TItem, bool> predicate) =>
-		_db.GetAsync(predicate);
+	public ValueTask<bool> ExistsAsync(TId id)
+	{
+		var key = getKey(id);
+		return _storage.ContainKeyAsync(key);
+	}
 
-	public ValueTask<TItem> GetRequiredAsync(Func<TItem, bool> predicate) =>
-		_db.GetRequiredAsync(predicate);
+	public async ValueTask<bool> ExistsAsync(Func<TDocument, bool> predicate) =>
+		await GetAsync(predicate) != null;
 
-	public ValueTask<List<TItem>> GetAllAsync(Func<TItem, bool> predicate) =>
-		_db.GetAllAsync(predicate);
+	public ValueTask<bool> ExistsAsync(TDocument item)
+	{
+		var key = getKey(item);
+		return _storage.ContainKeyAsync(key);
+	}
 
-	public ValueTask<TItem> GetRequiredAsync<TId>(TId id)
-		where TId : struct =>
-		_db.GetRequiredAsync<TItem, TId>(id);
+	public async IAsyncEnumerable<TDocument> QueryAsync()
+	{
+		var keys = await _storage.KeysAsync();
+		foreach (var key in keys)
+			if (key.StartsWith(_keyPrefix))
+			{
+				var value = await _storage.GetItemAsync<TDocument>(key) ??
+					throw new Exception("Key found in local storage but later returned null.");
+				yield return value;
+			}
+	}
 
-	public ValueTask DeleteAsync<TId>(TId id)
-		where TId : struct =>
-		_db.DeleteAsync<TItem, TId>(id);
+	public async ValueTask<TDocument?> GetAsync(Func<TDocument, bool> predicate)
+	{
+		await foreach (var item in QueryAsync())
+			if (predicate(item))
+				return item;
+		return null;
+	}
 
-	public ValueTask DeleteAsync(TItem item) =>
-		_db.DeleteAsync(item);
+	public async ValueTask<TDocument> GetRequiredAsync(Func<TDocument, bool> predicate) =>
+		await GetAsync(predicate) ?? throw new Exception("No entity matched predicate.");
+
+	public async ValueTask<List<TDocument>> GetAllAsync(Func<TDocument, bool> predicate)
+	{
+		var result = new List<TDocument>();
+		await foreach (var item in QueryAsync())
+			if (predicate(item))
+				result.Add(item);
+		return result;
+	}
+
+	public async ValueTask<TDocument> GetRequiredAsync(TId id)
+	{
+		var key = getKey(id);
+		return await _storage.GetItemAsync<TDocument>(key) ??
+			throw new Exception("Item with given ID and Type not found.");
+	}
+
+	public ValueTask DeleteAsync(TId id)
+	{
+		var key = getKey(id);
+		return _storage.RemoveItemAsync(key);
+	}
+
+	public ValueTask DeleteAsync(TDocument item)
+	{
+		var key = getKey(item);
+		return _storage.RemoveItemAsync(key);
+	}
+
+	protected string getKey(TId id) =>
+		_keyPrefix + id;
+
+	protected string getKey(TDocument item) =>
+		_keyPrefix + getId(item);
+
+	protected TId getId(TDocument item) =>
+		_config.GetIdFunc(item);
 }

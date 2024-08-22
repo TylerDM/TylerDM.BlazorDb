@@ -1,13 +1,13 @@
 ﻿namespace TylerDM.BlazorDb;
 
-public class Tests(BlazorDbContainer<Document> _db)
+public class Tests(BlazorDbContainer<Document, int> _db)
 {
 	[Fact]
 	public async Task GetAsync()
 	{
 		var item = await createAndAddRandomAsync();
 		Assert.NotNull(await _db.GetAsync(x => x.Id == item.Id));
-		Assert.Null(await _db.GetAsync(x => x.Id == Guid.NewGuid()));
+		Assert.Null(await _db.GetAsync(x => x.Id == int.MinValue));
 	}
 
 	[Fact]
@@ -70,7 +70,7 @@ public class Tests(BlazorDbContainer<Document> _db)
 		var matchingElements = await _db.GetAllAsync(x => x.Y == matchingY);
 		Assert.Equal(3, matchingElements.Count);
 
-		var nonexistent = await _db.GetAllAsync(x => x.Id == Guid.NewGuid());
+		var nonexistent = await _db.GetAllAsync(x => x.Id == int.MinValue);
 		Assert.Empty(nonexistent);
 	}
 
@@ -142,7 +142,7 @@ public class Tests(BlazorDbContainer<Document> _db)
 	}
 
 	static Document createRandom(int? x = null, int? y = null) =>
-		new(Guid.NewGuid())
+		new(NextInt())
 		{
 			X = x ?? NextInt(),
 			Y = y ?? NextInt()

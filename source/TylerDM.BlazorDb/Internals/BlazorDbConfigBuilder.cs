@@ -2,27 +2,19 @@
 
 public class BlazorDbConfigBuilder
 {
-	private readonly Dictionary<Type, string> _keys = [];
-	private readonly Dictionary<Type, Func<object, object>> _getIdFuncs = [];
+	public string DatabaseName { get; set; } = "";
 
-	public void AddContainer<TItem, TId>(Func<TItem, TId> getId, string key = "")
-		where TItem : class
+	public void AddContainer<TDocument, TId>(Func<TDocument, TId> getId, string key = "")
+		where TDocument : class
 		where TId : struct
 	{
-		object getIdFunc(object obj) => getId((TItem)obj);
-
-		var type = typeof(TItem);
-		if (key.Length == 0)
-			key = type.FullName ?? type.ToString();
-
-		_keys.Add(type, key);
-		_getIdFuncs.Add(type, getIdFunc);
+		
 	}
 
 	public BlazorDbConfig Build()
 	{
 		var frozenKeys = _keys.ToFrozenDictionary();
 		var frozenGetIdFunctions = _getIdFuncs.ToFrozenDictionary();
-		return new(frozenKeys, frozenGetIdFunctions);
+		return new(frozenKeys, frozenGetIdFunctions, DatabaseName);
 	}
 }
