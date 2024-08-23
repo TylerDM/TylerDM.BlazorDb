@@ -14,7 +14,7 @@ public static class Startup
 
 		var database = new BlazorDb(databaseName);
 
-		services.AddBlazoredLocalStorage(configureStorage);
+		services.AddBlazoredLocalStorageAsSingleton(configureStorage);
 
 		var builder = new BlazorDbConfigBuilder(services, database);
 		configureDb(builder);
