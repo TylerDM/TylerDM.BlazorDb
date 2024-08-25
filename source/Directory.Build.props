@@ -29,9 +29,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="System.Text.Json" Version="8.0.4" />
-		<PackageReference Include="TylerDM.OrangePeel" Version="2.0.2" />
 		<PackageReference Include="TylerDM.StandardLibrary" Version="4.0.0" />
-		<PackageReference Include="TylerDM.StandardLibrary.Web" Version="2.0.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
 	</ItemGroup>
 
